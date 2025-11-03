@@ -3,7 +3,8 @@ pipeline {
 
     environment {
         DOTNET_CLI_HOME = '.'
-        ALLURE_HOME = 'D:\Kurs\Jefit\QAC07-jefit_autotest\Jefit_test\bin\Debug\net9.0'
+        ALLURE_HOME = 'ALLURE_HOME = 'D:\\Kurs\\Jefit\\QAC07-jefit_autotest\\Jefit_test\\bin\\Debug\\net9.0'
+'
         ALLURE_RESULTS_DIR = 'allure-results'
     }
 
