@@ -36,18 +36,13 @@ pipeline {
 
     post {
         always {
+            // Создаем папку allure-results, если нет
             bat 'if not exist allure-results mkdir allure-results'
+
+            // Генерация отчета через локальный Allure CLI
             bat '"D:/Kurs/Allure/allure-2.35.1/bin/allure.bat" generate allure-results --clean -o allure-report'
 
-            script {
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    results: [[path: 'allure-results']],
-                    reportBuildPolicy: 'ALWAYS'
-                ])
-            }
-
+            // Архивируем результаты тестов
             archiveArtifacts artifacts: '**/*.trx', allowEmptyArchive: true
         }
 
