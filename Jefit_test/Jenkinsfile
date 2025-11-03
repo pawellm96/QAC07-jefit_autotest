@@ -4,25 +4,25 @@ pipeline {
     stages {
         stage('Restore') {
             steps {
-                // Восстановление пакетов NuGet
-                bat 'dotnet restore'
+                // Восстановление пакетов с указанием решения
+                bat 'dotnet restore "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln"'
             }
         }
 
         stage('Build') {
             steps {
-                // Сборка проекта
-                bat 'dotnet build --no-restore'
+                // Сборка проекта без повторного восстановления
+                bat 'dotnet build "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --no-restore'
             }
         }
 
         stage('Test') {
             steps {
                 // Запуск всех тестов
-                bat 'dotnet test --no-build --logger:"console;verbosity=detailed"'
+                bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --no-build --logger:"console;verbosity=detailed"'
                 
                 // Если используешь Allure NUnit адаптер:
-                // bat 'dotnet test --no-build --logger:"Allure;LogFilePath=allure-results"'
+                // bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --no-build --logger:"Allure;LogFilePath=allure-results"'
             }
         }
     }
