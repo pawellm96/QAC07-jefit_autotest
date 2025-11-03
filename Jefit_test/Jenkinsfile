@@ -1,24 +1,25 @@
 pipeline {
     agent any
 
-    environment {
-        DOTNET_CLI_HOME = '.'
-        ALLURE_HOME = 'D:/Kurs/Allure/allure-2.35.1/bin'
-        ALLURE_RESULTS_DIR = 'allure-results'
-        ALLURE_REPORT_DIR = 'allure-report'
+    tools {
+        // Здесь указываем имя установленного в Jenkins .NET SDK
+        dotnet 'dotnet-9.0'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/pawellm96/QAC07-jefit_autotest.git'
+                checkout scm
             }
         }
 
-        stage('Restore dependencies') {
+        stage('Restore Dependencies') {
             steps {
                 dir('Jefit_test') {
-                    bat 'dotnet restore Jefit_test.sln'
+                    // Восстановление NuGet пакетов
+                    withDotNet(dotNet: 'dotnet-9.0') {
+                        sh 'dotnet restore Jefit_test.sln'
+                    }
                 }
             }
         }
@@ -26,7 +27,9 @@ pipeline {
         stage('Build') {
             steps {
                 dir('Jefit_test') {
-                    bat 'dotnet build Jefit_test.sln --configuration Release'
+                    withDotNet(dotNet: 'dotnet-9.0') {
+                        sh 'dotnet build Jefit_test.sln --configuration Release'
+                    }
                 }
             }
         }
@@ -34,29 +37,20 @@ pipeline {
         stage('Run Tests') {
             steps {
                 dir('Jefit_test') {
-                    bat 'dotnet test Jefit_test.sln --configuration Release --logger "trx;LogFileName=test_results.trx"'
+                    withDotNet(dotNet: 'dotnet-9.0') {
+                        sh 'dotnet test Jefit_test.sln --configuration Release --logger "trx;LogFileName=test_results.trx"'
+                    }
                 }
             }
         }
 
-        stage('Generate Allure Report') {
+        stage('Allure Report') {
             steps {
-                // Генерация отчета Allure напрямую через bat
-                bat "\"${ALLURE_HOME}/allure.bat\" generate ${ALLURE_RESULTS_DIR} --clean -o ${ALLURE_REPORT_DIR}"
-            }
-        }
-
-        stage('Publish Allure Report (HTML)') {
-            steps {
-                // Публикация через HTML Publisher плагин
-                publishHTML([
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: "${ALLURE_REPORT_DIR}",
-                    reportFiles: 'index.html',
-                    reportName: 'Allure Report'
-                ])
+                allure(
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: 'Jefit_test/allure-results']]
+                )
             }
         }
     }
@@ -64,7 +58,6 @@ pipeline {
     post {
         always {
             junit 'Jefit_test/TestResults/*.trx'
-            cleanWs()
         }
     }
 }
