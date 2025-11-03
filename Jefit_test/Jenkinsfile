@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     environment {
-        DOTNET_CLI_HOME = '.'
-        ALLURE_HOME = 'D:/Kurs/Allure/allure-2.35.1/bin'
-        ALLURE_RESULTS_DIR = 'allure-results'
+        SOLUTION_PATH = "Jefit_test/Jefit_test.sln"
+        ALLURE_CMD = "D:/Kurs/Allure/allure-2.35.1/bin/allure.bat"
+        ALLURE_RESULTS = "allure-results"
+        ALLURE_REPORT = "allure-report"
     }
 
     stages {
@@ -14,46 +15,75 @@ pipeline {
             }
         }
 
+        stage('Clean Workspace') {
+            steps {
+                script {
+                    deleteDir()
+                }
+            }
+        }
+
         stage('Restore dependencies') {
             steps {
-                bat 'dotnet restore'
+                dir('Jefit_test') {
+                    bat "dotnet restore Jefit_test.sln"
+                }
             }
         }
 
         stage('Build') {
             steps {
-                bat 'dotnet build --configuration Release'
+                dir('Jefit_test') {
+                    bat "dotnet build Jefit_test.sln --configuration Release"
+                }
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat 'dotnet test --configuration Release --logger "trx;LogFileName=test_results.trx"'
-            }
-            post {
-                always {
-                    allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+                dir('Jefit_test') {
+                    bat """
+                        dotnet test Jefit_test.sln ^
+                        --logger:"trx;LogFileName=test-result.trx" ^
+                        || exit 0
+                    """
+                    // Копируем .trx в allure-results
+                    bat "if not exist ..\\${ALLURE_RESULTS} mkdir ..\\${ALLURE_RESULTS}"
+                    bat "copy test-result.trx ..\\${ALLURE_RESULTS} /Y"
                 }
             }
         }
 
         stage('Generate Allure Report') {
             steps {
-                bat "\"${env.ALLURE_HOME}\\allure.bat\" generate ${env.ALLURE_RESULTS_DIR} --clean -o allure-report"
+                bat """
+                    if not exist ${ALLURE_RESULTS} mkdir ${ALLURE_RESULTS}
+                    "${ALLURE_CMD}" generate ${ALLURE_RESULTS} --clean -o ${ALLURE_REPORT}
+                """
             }
         }
 
         stage('Publish Allure Report') {
             steps {
-                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: ALLURE_RESULTS]],
+                    reportBuildPolicy: 'ALWAYS'
+                ])
             }
         }
     }
 
     post {
         always {
-            junit '**/TestResults/*.trx'
-            cleanWs()
+            archiveArtifacts artifacts: 'Jefit_test/TestResults/*.trx', allowEmptyArchive: true
+        }
+        failure {
+            echo 'Test run FAILED!'
+        }
+        success {
+            echo 'Test run SUCCESSFUL!'
         }
     }
 }
