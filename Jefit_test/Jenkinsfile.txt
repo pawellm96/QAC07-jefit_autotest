@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'tsts', url: 'https://github.com/pawellm96/QAC07-jefit_autotest.git'
+                git branch: 'main', url: 'https://github.com/pawellm96/QAC07-jefit_autotest.git'
             }
         }
 
