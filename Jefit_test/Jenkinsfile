@@ -29,44 +29,44 @@ pipeline {
 
         stage('Restore') {
             steps {
-                // Указываем путь к .csproj
-                bat 'dotnet restore Jefit_test/Jefit_test.csproj'
+                // Используем полный путь к .sln с прямыми слэшами
+                bat 'dotnet restore "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln"'
             }
         }
 
         stage('Build') {
             steps {
-                bat 'dotnet build Jefit_test/Jefit_test.csproj --configuration Release'
+                bat 'dotnet build "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --configuration Release'
             }
         }
 
         stage('Test') {
             steps {
                 echo "Selected ENV: ${params.ENVIRONMENT}"
-                bat "dotnet test Jefit_test/Jefit_test.csproj --filter \"Category=${params.TEST_TAG}\" --logger:\"trx;LogFileName=test-result.trx\""
+                bat "dotnet test \"D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln\" --filter \"Category=${params.TEST_TAG}\" --logger:\"trx;LogFileName=test-result.trx\""
             }
         }
     }
 
     post {
         always {
-            // Создаём папку для результатов Allure
+            // Создаём папку для Allure
             bat 'if not exist allure-results mkdir allure-results'
 
-            // Генерация отчёта Allure
-            bat "\"D:\\Kurs\\Allure\\allure-2.35.1\\bin\\allure.bat\" generate allure-results --clean -o allure-report"
+            // Генерация отчёта через локальный Allure
+            bat "\"D:/Kurs/Allure/allure-2.35.1/bin/allure.bat\" generate allure-results --clean -o allure-report"
 
-            // Публикация отчёта через плагин
+            // Публикация отчёта через плагин (можно закомментировать, если SSL ошибки)
             script {
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    results: [[path: 'allure-results']],
-                    reportBuildPolicy: 'ALWAYS'
-                ])
+                // allure([
+                //     includeProperties: false,
+                //     jdk: '',
+                //     results: [[path: 'allure-results']],
+                //     reportBuildPolicy: 'ALWAYS'
+                // ])
             }
 
-            // Архивация результатов тестов
+            // Архивируем результаты тестов
             archiveArtifacts artifacts: '**/*.trx', allowEmptyArchive: true
         }
 
