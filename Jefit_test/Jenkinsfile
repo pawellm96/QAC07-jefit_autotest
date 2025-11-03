@@ -1,69 +1,81 @@
 pipeline {
-  agent any
-  
-  parameters {
-    choice(
-	  name:'ENVIRONMENT',
-	  choices:['dev', 'staging', 'prod'],
-	  description: 'Set ENV'
-	)
-	string(
-	  name:'TEST_TAG',
-	  defaultValue: 'QA',
-	  description: 'Run tests with tag'
-	)
-  }
-  
-  stages {
-    stage('Clean') {
-	  
-	    steps {
-		  script {
-		    deleteDir()
-	      }
-		}
-      
-	}
-	
-	stage('Restore') {
-	  steps {
-	    bat 'dotnet restore'
-	  }
+    agent any
+
+    parameters {
+        choice(
+            name: 'ENVIRONMENT',
+            choices: ['dev', 'staging', 'prod'],
+            description: 'Select environment'
+        )
+        string(
+            name: 'TEST_TAG',
+            defaultValue: 'QA',
+            description: 'Run tests with this tag'
+        )
     }
 
-    stage('Build') {
-      steps {
-        bat 'dotnet build --configuration Release'
-      }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/pawellm96/QAC07-jefit_autotest.git'
+            }
+        }
+
+        stage('Clean') {
+            steps {
+                script { deleteDir() }
+            }
+        }
+
+        stage('Restore') {
+            steps {
+                // Указываем путь к .csproj
+                bat 'dotnet restore Jefit_test/Jefit_test.csproj'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat 'dotnet build Jefit_test/Jefit_test.csproj --configuration Release'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "Selected ENV: ${params.ENVIRONMENT}"
+                bat "dotnet test Jefit_test/Jefit_test.csproj --filter \"Category=${params.TEST_TAG}\" --logger:\"trx;LogFileName=test-result.trx\""
+            }
+        }
     }
 
-    stage('Test') {
-      steps {
-	    echo "Select ENV: ${params.ENVIRONMENT}"
-        bat "dotnet test --filter \"Category=${params.TEST_TAG}\" --logger:\"trx;LogFileName=test-result.trx\""
-      }
-    }	
+    post {
+        always {
+            // Создаём папку для результатов Allure
+            bat 'if not exist allure-results mkdir allure-results'
 
-  }
-  
-  post {
-    always {
-	  bat 'allure generate allure-results --clean -o allure-report'
-	  script {
-	    allure([
-      includeProperties: false,
-      jdk: '',
-      results: [[path: 'allure-results']],
-      reportBuildPolicy: 'ALWAYS'
-    ])
-	  }
-	  archiveArtifacts artifacts: '**/*.trx', allowEmptyArchive: true
-	}
-    failure {
-      echo 'Test run is failed!'
+            // Генерация отчёта Allure
+            bat "\"D:\\Kurs\\Allure\\allure-2.35.1\\bin\\allure.bat\" generate allure-results --clean -o allure-report"
+
+            // Публикация отчёта через плагин
+            script {
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: 'allure-results']],
+                    reportBuildPolicy: 'ALWAYS'
+                ])
+            }
+
+            // Архивация результатов тестов
+            archiveArtifacts artifacts: '**/*.trx', allowEmptyArchive: true
+        }
+
+        failure {
+            echo 'Test run FAILED!'
+        }
+
+        success {
+            echo 'Test run SUCCESSFUL!'
+        }
     }
-    success {
-      echo 'SUCCESS!!!'
-    }
-  }
 }
