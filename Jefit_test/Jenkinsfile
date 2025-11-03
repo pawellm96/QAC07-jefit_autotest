@@ -16,7 +16,7 @@ pipeline {
 
         stage('Restore') {
             steps {
-                // Используем полный путь к .sln с прямыми слэшами
+                // Полный путь к .sln с прямыми слэшами
                 bat 'dotnet restore "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln"'
             }
         }
@@ -29,17 +29,21 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo "Selected ENV: ${params.ENVIRONMENT}"
-                bat "dotnet test \"D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln\" --filter \"Category=${params.TEST_TAG}\" --logger:\"trx;LogFileName=test-result.trx\""
+                echo "Selected ENV: ${params.ENVIRONMENT ?: 'dev'}"
+                
+                // Если в проекте нет категорий, запускаем все тесты
+                bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --logger:"trx;LogFileName=test-result.trx"'
             }
         }
     }
 
     post {
         always {
+            // Создаём папку allure-results, если не существует
             bat 'if not exist allure-results mkdir allure-results'
 
-            bat "\"D:/Kurs/Allure/allure-2.35.1/bin/allure.bat\" generate allure-results --clean -o allure-report"
+            // Генерация Allure отчёта
+            bat '"D:/Kurs/Allure/allure-2.35.1/bin/allure.bat" generate allure-results --clean -o allure-report'
 
             script {
                 allure([
@@ -58,7 +62,4 @@ pipeline {
         }
 
         success {
-            echo 'Test run SUCCESSFUL!'
-        }
-    }
-}
+            ech
