@@ -1,13 +1,35 @@
 pipeline {
-    agent any      
-    
-    stages {       
-            stage('Test') {
-            steps 
-            {
-                 echo 'dotnet test --filter Name~"OpenStaptPageTest"'
+    agent any
+
+    stages {
+        stage('Restore') {
+            steps {
+                // Восстановление пакетов NuGet
+                bat 'dotnet restore'
             }
         }
-        
+
+        stage('Build') {
+            steps {
+                // Сборка проекта
+                bat 'dotnet build --no-restore'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Запуск всех тестов
+                bat 'dotnet test --no-build --logger:"console;verbosity=detailed"'
+                
+                // Если используешь Allure NUnit адаптер:
+                // bat 'dotnet test --no-build --logger:"Allure;LogFilePath=allure-results"'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Тесты завершены'
+        }
     }
 }
