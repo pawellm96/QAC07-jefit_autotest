@@ -2,9 +2,16 @@ pipeline {
     agent any
 
     stages {
+        stage('Prepare Allure') {
+            steps {
+                // Создаём директорию для Allure результатов
+                bat 'if not exist allure-results mkdir allure-results'
+            }
+        }
+
         stage('Restore') {
             steps {
-                // Восстановление пакетов с указанием решения
+                // Восстановление пакетов NuGet
                 bat 'dotnet restore "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln"'
             }
         }
@@ -18,11 +25,8 @@ pipeline {
 
         stage('Test') {
             steps {
-                // Запуск всех тестов
-                bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --no-build --logger:"console;verbosity=detailed"'
-                
-                // Если используешь Allure NUnit адаптер:
-                // bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --no-build --logger:"Allure;LogFilePath=allure-results"'
+                // Запуск тестов с генерацией Allure результатов
+                bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --no-build --logger:"Allure;LogFilePath=allure-results"'
             }
         }
     }
@@ -30,6 +34,9 @@ pipeline {
     post {
         always {
             echo 'Тесты завершены'
+
+            // Публикация Allure отчёта в Jenkins
+            allure includeProperties: false, results: [[path: 'allure-results']]
         }
     }
 }
