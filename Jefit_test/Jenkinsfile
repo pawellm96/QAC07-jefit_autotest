@@ -32,7 +32,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                bat 'dotnet test Jefit_test/Jefit_test.sln --no-build --logger:"trx;LogFileName=test-result.trx"'
+                bat 'dotnet test "D:/Kurs/.../Jefit_test.sln" --no-build'
             }
         }
 
