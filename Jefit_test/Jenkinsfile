@@ -42,7 +42,7 @@ pipeline {
             '''
 
             // ✅ Публикуем Allure отчет
-            allure includeProperties: false, results: [[path: 'allure-results']]
+            allure includeProperties: false, results: [[path: 'Jefit_test/allure-results']]
         }
 
         failure {
