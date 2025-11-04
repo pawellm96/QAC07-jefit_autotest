@@ -27,14 +27,14 @@ pipeline {
             steps {
                 // Запуск всех тестов с обычным логгером
                 // Allure результаты будут генерироваться через NUnit атрибуты
-                bat 'dotnet test --logger:\"trx;LogFileName=test-result.trx\"'
+                bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --logger:\"trx;LogFileName=test-result.trx\"'
             }
         }
     }
 
     post {
     always {
-	  bat 'allure generate allure-results --clean -o allure-report'
+	  bat 'allure generate "D:\Kurs\Jefit\QAC07-jefit_autotest\Jefit_test\bin\Debug\net9.0\allure-results" --clean -o "D:\Kurs\Jefit\QAC07-jefit_autotest\Jefit_test\bin\Debug\net9.0\allure-report"'
 	  script {
 	    allure([
       includeProperties: false,
