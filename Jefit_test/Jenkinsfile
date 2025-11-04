@@ -34,6 +34,14 @@ pipeline {
     post {
         always {
             echo '✅ Test run is finished'
+
+            // ✅ Добавляем Allure Environment
+            bat '''
+                echo OS=Windows > allure-results/environment.properties
+                echo .NET=9.0 >> allure-results/environment.properties
+            '''
+
+            // ✅ Публикуем Allure отчет
             allure includeProperties: false, results: [[path: 'allure-results']]
         }
 
