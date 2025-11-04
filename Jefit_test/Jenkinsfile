@@ -2,29 +2,32 @@ pipeline {
     agent any
 
     stages {
-		stage('Prepare Allure') {
+        stage('Prepare Allure') {
             steps {
                 // Создаём папку для результатов Allure
                 bat 'if not exist allure-results mkdir allure-results'
             }
         }
+
         stage('Restore') {
             steps {
+                // Восстановление пакетов NuGet
                 bat 'dotnet restore "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln"'
             }
         }
 
         stage('Build') {
             steps {
-                bat 'dotnet build --configuration Release'
+                // Сборка проекта без повторного восстановления
+                bat 'dotnet build "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --no-restore'
             }
         }
 
-       stage('Test') {
+        stage('Test') {
             steps {
                 // Запуск всех тестов с обычным логгером
                 // Allure результаты будут генерироваться через NUnit атрибуты
-                bat 'dotnet test --logger:\"trx;LogFileName=test-result.trx\"'
+                bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --logger:\"trx;LogFileName=test-result.trx\"'
             }
         }
     }
@@ -48,5 +51,5 @@ pipeline {
     success {
       echo 'SUCCESS!!!'
     }
-  }
+    }
 }
