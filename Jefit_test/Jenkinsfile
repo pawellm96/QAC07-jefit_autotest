@@ -2,7 +2,12 @@ pipeline {
     agent any
 
     stages {
-
+		stage('Prepare Allure') {
+            steps {
+                // Создаём папку для результатов Allure
+                bat 'if not exist allure-results mkdir allure-results'
+            }
+        }
         stage('Restore') {
             steps {
                 bat 'dotnet restore "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln"'
@@ -19,7 +24,7 @@ pipeline {
             steps {
                 // Запуск всех тестов с обычным логгером
                 // Allure результаты будут генерироваться через NUnit атрибуты
-                bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --logger:\"trx;LogFileName=test-result.trx\"'
+                bat 'dotnet test --logger:\"trx;LogFileName=test-result.trx\"'
             }
         }
     }
