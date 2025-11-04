@@ -35,6 +35,7 @@ pipeline {
     post {
     always {
 	  bat 'allure generate TestResults --clean -o allure-report'
+		bat 'allure open allure-report'
 	  script {
 	    allure([
       includeProperties: false,
