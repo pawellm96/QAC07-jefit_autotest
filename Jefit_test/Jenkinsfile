@@ -16,22 +16,22 @@ pipeline {
         }
 
        stage('Test') {
-      steps {
-	    echo "Select ENV: ${params.ENVIRONMENT}"
-        bat "dotnet test --logger:\"trx;LogFileName=test-result.trx\""
-      }
-    }
+	      steps {
+		    echo "Select ENV: ${params.ENVIRONMENT}"
+	        bat "dotnet test --logger:\"trx;LogFileName=test-result.trx\""
+	      }
+    	}
 
     post {
-    always {
-	  bat 'allure generate TestResults --clean -o allure-report'
-	  script {
-	    allure([
-      includeProperties: false,
-      jdk: '',
-      results: [[path: 'TestResults']],
-      reportBuildPolicy: 'ALWAYS'
-    ])
+	    always {
+		  bat 'allure generate TestResults --clean -o allure-report'
+		  script {
+		    allure([
+	      includeProperties: false,
+	      jdk: '',
+	      results: [[path: 'TestResults']],
+	      reportBuildPolicy: 'ALWAYS'
+	    ])
 	  }
 	  archiveArtifacts artifacts: '**/*.trx', allowEmptyArchive: true
 	}
