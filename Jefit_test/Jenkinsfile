@@ -2,54 +2,53 @@ pipeline {
     agent any
 
     stages {
-        stage('Prepare Allure') {
-            steps {
-                // Создаём папку для результатов Allure
-                bat 'if not exist allure-results mkdir allure-results'
-            }
-        }
-
         stage('Restore') {
             steps {
-                // Восстановление пакетов NuGet
                 bat 'dotnet restore "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln"'
             }
         }
 
         stage('Build') {
             steps {
-                // Сборка проекта без повторного восстановления
                 bat 'dotnet build "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --no-restore'
             }
         }
 
         stage('Test') {
             steps {
-                // Запуск всех тестов с обычным логгером
-                // Allure результаты будут генерироваться через NUnit атрибуты
-                bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --logger:\"trx;LogFileName=test-result.trx\"'
+                // Создаём директорию allure-results в Jenkins workspace
+                bat 'if not exist allure-results mkdir allure-results'
+
+                // Запускаем тесты и указываем, чтобы Allure adapter сохранял туда результаты
+                bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --logger:"console;verbosity=detailed" --results-directory "allure-results"'
             }
         }
     }
 
     post {
-    always {
-	  bat 'allure generate TestResults --clean -o allure-report'
-	  script {
-	    allure([
-      includeProperties: false,
-      jdk: '',
-      results: [[path: 'TestResults']],
-      reportBuildPolicy: 'ALWAYS'
-    ])
-	  }
-	  archiveArtifacts artifacts: '**/*.trx', allowEmptyArchive: true
-	}
-    failure {
-      echo 'Test run is failed!'
-    }
-    success {
-      echo 'SUCCESS!!!'
-    }
+        always {
+            // Генерация отчёта из allure-results
+            bat 'allure generate allure-results --clean -o allure-report'
+
+            // Публикация отчёта в Jenkins
+            script {
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: 'allure-results']],
+                    reportBuildPolicy: 'ALWAYS'
+                ])
+            }
+
+            archiveArtifacts artifacts: '**/*.trx', allowEmptyArchive: true
+        }
+
+        failure {
+            echo '❌ Test run failed!'
+        }
+
+        success {
+            echo '✅ SUCCESS!'
+        }
     }
 }
