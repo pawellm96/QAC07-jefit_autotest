@@ -33,12 +33,23 @@ pipeline {
     }
 
     post {
-        always {
-            echo 'Тесты завершены'
-
-            // Публикация Allure отчёта через Allure Plugin
-            bat 'allure generate TestResults --clean -o allure-report'
-            allure includeProperties: false, results: [[path: 'allure-results']]
-        }
+    always {
+	  bat 'allure generate TestResults --clean -o allure-report'
+	  script {
+	    allure([
+      includeProperties: false,
+      jdk: '',
+      results: [[path: 'TestResults']],
+      reportBuildPolicy: 'ALWAYS'
+    ])
+	  }
+	  archiveArtifacts artifacts: '**/*.trx', allowEmptyArchive: true
+	}
+    failure {
+      echo 'Test run is failed!'
+    }
+    success {
+      echo 'SUCCESS!!!'
+    }
     }
 }
