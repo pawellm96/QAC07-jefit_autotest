@@ -14,7 +14,7 @@ namespace Jefit_test.Tests
         [AllureOwner("Pavel")]
         [AllureSuite("SuccessfulOpeningSatrtPage")]
         [AllureStep("Проверка открытия начальной страницы сайта")]
-        public void OpenStaptPageTest()
+        public void OpenStartPageTest()
         {
             StartPage.OpenPage();
             Assert.That(driver.Url, Is.EqualTo("https://www.jefit.com/"), $"Начальная страница не открылась");
