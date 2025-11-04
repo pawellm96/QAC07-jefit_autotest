@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        allure 'Allure-Scoop'
+        allure 'Allure_2.35.1'
     }
 
     stages {
@@ -26,7 +26,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --no-build --logger:"console;verbosity=detailed"'
+                bat "dotnet test --logger:\"trx;LogFileName=test-result.trx\""
             }
         }
 
