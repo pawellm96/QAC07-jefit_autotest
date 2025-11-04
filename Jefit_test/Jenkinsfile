@@ -37,6 +37,7 @@ pipeline {
             echo 'Тесты завершены'
 
             // Публикация Allure отчёта через Allure Plugin
+            bat 'allure generate TestResults --clean -o allure-report'
             allure includeProperties: false, results: [[path: 'allure-results']]
         }
     }
