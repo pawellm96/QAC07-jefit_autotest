@@ -12,21 +12,27 @@ pipeline {
             }
         }
 
+        stage('Check workspace') {
+            steps {
+                bat 'dir' // просто покажет, что Jenkins видит проект из GitHub
+            }
+        }
+
         stage('Restore') {
             steps {
-                bat 'dotnet restore "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln"'
+                bat 'dotnet restore Jefit_test/Jefit_test.sln'
             }
         }
 
         stage('Build') {
             steps {
-                bat 'dotnet build "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --no-restore'
+                bat 'dotnet build Jefit_test/Jefit_test.sln --no-restore'
             }
         }
 
         stage('Test') {
             steps {
-                bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --logger:\"trx;LogFileName=test-result.trx\"'
+                bat 'dotnet test Jefit_test/Jefit_test.sln --no-build --logger:"trx;LogFileName=test-result.trx"'
             }
         }
 
@@ -39,12 +45,12 @@ pipeline {
 
     post {
         always {
-            echo '✅ Test run is finished'
+            echo 'Test run is finished'
             allure includeProperties: false, results: [[path: 'allure-results']]
         }
 
         failure {
-            echo '❌ Test run failed!'
+            echo 'Test run failed!'
         }
     }
 }
