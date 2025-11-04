@@ -1,9 +1,11 @@
-﻿using Jefit_test.Pages;
+﻿using Allure.Net.Commons;
+using Allure.NUnit;
 using Allure.NUnit.Attributes;
-using Allure.Net.Commons;
+using Jefit_test.Pages;
 
 namespace Jefit_test.Tests
 {
+    [AllureNUnit]
     public class StartPageTest : Jefit_BaseTest
     {
         private StartPage StartPage = new StartPage();
