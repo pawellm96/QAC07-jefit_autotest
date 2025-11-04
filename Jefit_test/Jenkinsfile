@@ -34,12 +34,12 @@ pipeline {
 
     post {
     always {
-	  bat 'allure generate TestResults --clean -o allure-report'
+	  bat 'allure generate allure-results --clean -o allure-report'
 	  script {
 	    allure([
       includeProperties: false,
       jdk: '',
-      results: [[path: 'TestResults']],
+      results: [[path: 'allure-results']],
       reportBuildPolicy: 'ALWAYS'
     ])
 	  }
