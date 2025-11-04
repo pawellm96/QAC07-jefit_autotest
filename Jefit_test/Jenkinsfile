@@ -13,14 +13,6 @@ pipeline {
                 checkout scm
             }
         }
-
-        stage('Prepare Allure') {
-            steps {
-                // Создаём папку для результатов Allure
-                bat 'if not exist allure-results mkdir allure-results'
-            }
-        }
-
         stage('Restore') {
             steps {
                 bat 'dotnet restore "Jefit_test/Jefit_test.sln"'
@@ -37,6 +29,13 @@ pipeline {
             steps {
                 // Запуск тестов без указания trx/console логгера, чтобы AllureListener написал JSON файлы
                 bat 'dotnet test "Jefit_test/Jefit_test.sln" --no-build'
+            }
+        }
+        
+        stage('Prepare Allure') {
+            steps {
+                // Создаём папку для результатов Allure
+                bat 'if not exist allure-results mkdir allure-results'
             }
         }
 
