@@ -36,6 +36,12 @@ namespace Jefit_test.Tests
                 });
             }
 
+            //BrowserUtils.Quit();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
             BrowserUtils.Quit();
         }
     }

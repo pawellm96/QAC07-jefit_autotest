@@ -1,9 +1,6 @@
 ﻿using Allure.NUnit.Attributes;
 using Jefit_test.Utils;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.WaitHelpers;
 
 namespace Jefit_test.Pages
 {    
@@ -12,11 +9,13 @@ namespace Jefit_test.Pages
         private readonly By productsMenuLocator = By.XPath("//p[text()='Products']");
         private readonly By maximizedWindowItemLocator = By.XPath("//a[@href='/elite']");
         private readonly By minimalWindowItemLocator = By.XPath("//p[text()='Elite']");
+        private readonly By exerciseTipsHeaderLocator = By.XPath("//h3[text()='Exercise Tips']");
+        private readonly By jefitWatchTextLocator = By.XPath("//p[contains(text(),'Jefit Watch just got a major upgrade')]");
 
         [AllureStep("Открыть начальную страницу")]
         public void OpenPage()
         {
-            BrowserUtils.OpenPage("https://www.jefit.com/");
+            BrowserUtils.OpenPage(Links.StartPage);
         }
 
         [AllureStep("Вызвать выпадающий список 'Products'")]
@@ -33,6 +32,22 @@ namespace Jefit_test.Pages
             {
                 WaitUntilVisible(minimalWindowItemLocator);
             }
+        }
+
+        [AllureStep("Прокрутить страницу до заголовка Exercise Tips")]
+        public void ScrollToExerciseTips()
+        {
+            var header = WaitUntilVisible(exerciseTipsHeaderLocator);
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView({behavior:'smooth', block:'center'});", header);
+        }
+
+        [AllureStep("Нажать на ссылку JEFIT Watch Upgrade")]
+        public void ClickJefitWatchLink()
+        {
+            // Прокрутка до раздела, если надо
+            ScrollToExerciseTips(); // если требуется
+            var link = WaitUntilClickable(jefitWatchTextLocator);
+            link.Click();
         }
     }
 }

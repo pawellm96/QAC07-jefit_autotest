@@ -3,7 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 
-namespace Jefit_test.SeleniumFramework;
+namespace AutomationTesting.SeleniumFramework;
 
 public class AlertElement
 {

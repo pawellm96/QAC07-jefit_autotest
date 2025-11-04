@@ -1,6 +1,7 @@
 ﻿using Allure.Net.Commons;
 using Allure.NUnit;
 using Allure.NUnit.Attributes;
+using Jefit_test.Utils;
 using Jefit_test.Pages;
 using OpenQA.Selenium;
 
@@ -11,7 +12,7 @@ namespace Jefit_test.Tests
     {
         private StartPage StartPage = new StartPage();
 
-        [Test]
+        [Test, Order(1)]
         [AllureTag("smoke")]
         [AllureSeverity(SeverityLevel.normal)]
         [AllureOwner("Pavel")]
@@ -20,10 +21,10 @@ namespace Jefit_test.Tests
         public void OpenStartPageTest()
         {
             StartPage.OpenPage();
-            Assert.That(driver.Url, Is.EqualTo("https://www.jefit.com/"), $"Начальная страница не открылась");
+            Assert.That(driver.Url, Is.EqualTo(Links.StartPage), $"Начальная страница не открылась");
         }
 
-        [Test]
+        [Test, Order(2)]
         [AllureTag("smoke")]
         [AllureSeverity(SeverityLevel.normal)]
         [AllureOwner("Pavel")]
@@ -45,6 +46,27 @@ namespace Jefit_test.Tests
             }
 
             Assert.That(dropdownItem.Displayed, Is.True, "Выпадающее меню 'Products' не открылось после клика");
+        }
+
+        [Test, Order(3)]
+        [AllureTag("smoke")]
+        [AllureSeverity(SeverityLevel.critical)]
+        [AllureOwner("Pavel")]
+        [AllureSuite("StartPage")]
+        [AllureStep("Проверка перехода по ссылке JEFIT Watch Upgrade")]
+        public void JefitWatchUpgradePageTest()
+        {
+            StartPage.OpenPage();
+            StartPage.ScrollToExerciseTips();
+            StartPage.ClickJefitWatchLink();
+
+            var handles = driver.WindowHandles;
+            if (handles.Count > 1)
+            {
+                driver.SwitchTo().Window(handles.Last());
+            }
+
+            Assert.That(driver.Url, Is.EqualTo(Links.JefitWatchUpdate), "После клика по ссылке не открылась ожидаемая страница обновления JEFIT Watch");
         }
     }
 }
