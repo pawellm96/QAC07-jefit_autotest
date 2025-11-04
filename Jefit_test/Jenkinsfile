@@ -27,7 +27,7 @@ pipeline {
             steps {
                 // Запуск всех тестов с обычным логгером
                 // Allure результаты будут генерироваться через NUnit атрибуты
-                bat 'dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" --logger:\"trx;LogFileName=test-result.trx\"'
+                bat 'dotnet test --logger:\"trx;LogFileName=test-result.trx\"'
             }
         }
     }
