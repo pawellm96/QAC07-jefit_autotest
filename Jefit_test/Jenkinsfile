@@ -17,14 +17,11 @@ pipeline {
 
         stage('Test') {
             steps {
-                // Создаём папку для Allure
-                bat 'if not exist allure-results mkdir allure-results'
-
-                // Запускаем тесты и указываем Allure, куда писать результаты
                 bat '''
+                if not exist allure-results mkdir allure-results
                 dotnet test "D:/Kurs/Jefit/QAC07-jefit_autotest/Jefit_test/Jefit_test.sln" ^
                 --logger:"console;verbosity=detailed" ^
-                -- TestRunParameters.Parameter(name="allure.results.directory", value="allure-results")
+                -- TestRunParameters.Parameter(name=\\"allure.results.directory\\", value=\\"allure-results\\")
                 '''
             }
         }
@@ -47,7 +44,7 @@ pipeline {
                 ])
             }
 
-            // Сохраняем .trx-файлы (если нужно)
+            // Архивирование .trx, если нужны сырые логи
             archiveArtifacts artifacts: '**/*.trx', allowEmptyArchive: true
         }
 
