@@ -33,9 +33,9 @@ public class BrowserUtils
         driver.Navigate().GoToUrl(url);
     }
 
-    public static void Quit()
-    {
-        driver?.Quit();
-        driver = null;
-    }
+    //public static void Quit()
+    //{
+    //    driver?.Quit();
+    //    driver = null;
+    //}
 }

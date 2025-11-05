@@ -44,8 +44,7 @@ namespace Jefit_test.Pages
         [AllureStep("Нажать на ссылку JEFIT Watch Upgrade")]
         public void ClickJefitWatchLink()
         {
-            // Прокрутка до раздела, если надо
-            ScrollToExerciseTips(); // если требуется
+            ScrollToExerciseTips();
             var link = WaitUntilClickable(jefitWatchTextLocator);
             link.Click();
         }

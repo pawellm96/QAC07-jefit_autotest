@@ -14,7 +14,7 @@ namespace Jefit_test.Tests
 
         [Test, Order(1)]
         [AllureTag("smoke")]
-        [AllureSeverity(SeverityLevel.normal)]
+        [AllureSeverity(SeverityLevel.critical)]
         [AllureOwner("Pavel")]
         [AllureSuite("SuccessfulOpeningSatrtPage")]
         [AllureStep("Проверка открытия начальной страницы сайта")]
@@ -50,7 +50,7 @@ namespace Jefit_test.Tests
 
         [Test, Order(3)]
         [AllureTag("smoke")]
-        [AllureSeverity(SeverityLevel.critical)]
+        [AllureSeverity(SeverityLevel.normal)]
         [AllureOwner("Pavel")]
         [AllureSuite("StartPage")]
         [AllureStep("Проверка перехода по ссылке JEFIT Watch Upgrade")]

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Jefit_test.Pages
 {
-    internal class TryForFree
+    internal class LoginPage
     {
     }
 }
