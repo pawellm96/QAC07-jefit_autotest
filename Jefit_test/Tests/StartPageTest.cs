@@ -32,7 +32,6 @@ namespace Jefit_test.Tests
         [AllureStep("Проверка вызова выпадающего списка Products")]
         public void OpenDropdownList()
         {
-            StartPage.OpenPage();
             StartPage.OpenDropeDown();
 
             IWebElement dropdownItem;
@@ -56,7 +55,6 @@ namespace Jefit_test.Tests
         [AllureStep("Проверка перехода по ссылке JEFIT Watch Upgrade")]
         public void JefitWatchUpgradePageTest()
         {
-            StartPage.OpenPage();
             StartPage.ScrollToExerciseTips();
             StartPage.ClickJefitWatchLink();
 

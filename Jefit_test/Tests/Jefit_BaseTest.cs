@@ -37,10 +37,10 @@ namespace Jefit_test.Tests
             }
         }
 
-        //[OneTimeTearDown]
-        //public void OneTimeTearDown()
-        //{
-        //    BrowserUtils.Quit();
-        //}
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            BrowserUtils.Quit();
+        }
     }
 }

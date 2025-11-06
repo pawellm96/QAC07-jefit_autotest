@@ -1,4 +1,3 @@
-using Allure.NUnit.Attributes;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 

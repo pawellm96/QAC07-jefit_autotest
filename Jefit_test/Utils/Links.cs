@@ -13,5 +13,7 @@
         public const string RegisterPage = "https://www.jefit.com/signup/register";
 
         public const string ResultPage = "https://www.jefit.com/signup/results";
+
+        public const string UserJefit = "https://www.jefit.com/my-jefit";
     }
 }
