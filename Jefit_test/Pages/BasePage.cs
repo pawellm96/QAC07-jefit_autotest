@@ -41,4 +41,8 @@ public abstract class BasePage
         );
     }
 
+    public void WaitUntilInvisibility(By locator, int timeoutSeconds = 5)
+    {
+        Wait(timeoutSeconds).Until(ExpectedConditions.InvisibilityOfElementLocated(locator));
+    }
 }

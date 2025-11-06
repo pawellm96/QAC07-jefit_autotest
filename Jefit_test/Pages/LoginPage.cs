@@ -2,6 +2,7 @@
 using Jefit_test.SeleniumFramework;
 using Jefit_test.Utils;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Jefit_test.Pages
 {
@@ -17,6 +18,7 @@ namespace Jefit_test.Pages
         private readonly By continueButton = By.XPath("//button[normalize-space(text())='Continue' and @type='button']");
         private readonly By userMenu = By.XPath("//span[contains(@class,'truncate') and text()='kaR35xPCGFKcQM3m']");
         private readonly By signOutButton = By.XPath("//div[@data-slot='label' and normalize-space(text())='Sign out']");
+        private readonly By modalPanel = By.Id("headlessui-dialog-panel-_r_1n_");
 
         [AllureStep("Открыть начальную страницу")]
         public void OpenPage()
@@ -45,6 +47,20 @@ namespace Jefit_test.Pages
 
             buttonElement = new ButtonElement(continueButton);
             buttonElement.ClickIfEnabled();
+
+        }
+
+        [AllureStep("Закрыть модальное окно и дождаться исчезновения")]
+        public void CloseModalIfVisible()
+        {
+            var modal = new BaseElement(modalPanel);
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            if (modal.IsDisplayed())
+            {
+                buttonElement = new ButtonElement(continueButton);
+                buttonElement.ClickIfEnabled();
+                wait.Until(d => !modal.IsDisplayed());
+            }
         }
 
         public bool WaitUntilLoginFieldVisible()
@@ -55,6 +71,7 @@ namespace Jefit_test.Pages
         [AllureStep("Открыть выпадающий список поля пользователя")]
         public void CLickUserField()
         {
+            CloseModalIfVisible();
             var waitUserMenu = WaitUntilClickable(userMenu);
             buttonElement = new ButtonElement(userMenu);
             buttonElement.ClickIfEnabled();
