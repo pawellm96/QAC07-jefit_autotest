@@ -1,4 +1,6 @@
-﻿namespace Jefit_test.Utils
+﻿using static System.Net.WebRequestMethods;
+
+namespace Jefit_test.Utils
 {
     public static class Links
     {
@@ -15,5 +17,9 @@
         public const string ResultPage = "https://www.jefit.com/signup/results";
 
         public const string UserJefit = "https://www.jefit.com/my-jefit";
+
+        public const string LoginPage = "https://www.jefit.com/login";
+
+        public const string ExercisePage = "https://www.jefit.com/my-jefit/exercises";
     }
 }

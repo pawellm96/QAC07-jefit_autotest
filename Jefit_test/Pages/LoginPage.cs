@@ -2,7 +2,6 @@
 using Jefit_test.SeleniumFramework;
 using Jefit_test.Utils;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 
 namespace Jefit_test.Pages
 {
@@ -11,14 +10,13 @@ namespace Jefit_test.Pages
         private ButtonElement buttonElement;
         private BaseElement inputElement;
 
-        private readonly By buttonToLoginPage = By.XPath("//a[@href='/login' and normalize-space(text())='Log In']");
-        private readonly By nameField = By.XPath("//input[@name='username' and @type='text']");
-        private readonly By passwordField = By.XPath("//input[@type='password' and @name='password']");
-        private readonly By loginButton = By.XPath("//button[@type='submit' and normalize-space(text())='Log In']");
-        private readonly By continueButton = By.XPath("//button[normalize-space(text())='Continue' and @type='button']");
-        private readonly By userMenu = By.XPath("//span[contains(@class,'truncate') and text()='kaR35xPCGFKcQM3m']");
-        private readonly By signOutButton = By.XPath("//div[@data-slot='label' and normalize-space(text())='Sign out']");
-        private readonly By modalPanel = By.XPath("//div[@data-headlessui-state='open' and .//h2[contains(text(),'Welcome to the new My Jefit Dashboard!')]]");
+        private readonly By buttonToLoginPageLocator = By.XPath("//a[@href='/login' and normalize-space(text())='Log In']");
+        private readonly By nameFieldLocator = By.XPath("//input[@name='username' and @type='text']");
+        private readonly By passwordFieldLocator = By.XPath("//input[@type='password' and @name='password']");
+        private readonly By loginButtonLocator = By.XPath("//button[@type='submit' and normalize-space(text())='Log In']");
+        private readonly By continueButtonLocator = By.XPath("//button[normalize-space(text())='Continue' and @type='button']");
+        private readonly By userMenuLocator = By.XPath("//span[contains(@class,'truncate') and text()='kaR35xPCGFKcQM3m']");
+        private readonly By signOutButtonLocator = By.XPath("//div[@data-slot='label' and normalize-space(text())='Sign out']");
 
         [AllureStep("Открыть начальную страницу")]
         public void OpenPage()
@@ -29,40 +27,39 @@ namespace Jefit_test.Pages
         [AllureStep("Открыть форму логина через кнопку на начальной странице")]
         public void CLickLogIn()
         {
-            buttonElement = new ButtonElement(buttonToLoginPage);
+            buttonElement = new ButtonElement(buttonToLoginPageLocator);
             buttonElement.ClickIfEnabled();
         }
 
         [AllureStep("Ввестиданные на странице, выполнить вход, закрыть всплавающее окно")]
         public void EnterLoginData(string email, string password)
         {
-            inputElement = new BaseElement(nameField);
+            inputElement = new BaseElement(nameFieldLocator);
             inputElement.SetUpText(email);
 
-            inputElement = new BaseElement(passwordField);
+            inputElement = new BaseElement(passwordFieldLocator);
             inputElement.SetUpText(password);
 
-            buttonElement = new ButtonElement(loginButton);
+            buttonElement = new ButtonElement(loginButtonLocator);
             buttonElement.ClickIfEnabled();
 
-            buttonElement = new ButtonElement(continueButton);
+            buttonElement = new ButtonElement(continueButtonLocator);
             buttonElement.ClickIfEnabled();
-
         }
 
         public bool WaitUntilLoginFieldVisible()
         {
-            return WaitUntilVisible(nameField) != null;
+            return WaitUntilVisible(nameFieldLocator) != null;
         }
 
         [AllureStep("Открыть выпадающий список поля пользователя")]
         public void CLickUserField()
         {
-            var waitUserMenu = WaitUntilClickable(userMenu);
-            buttonElement = new ButtonElement(userMenu);
+            var waitUserMenu = WaitUntilClickable(userMenuLocator);
+            buttonElement = new ButtonElement(userMenuLocator);
             buttonElement.ClickIfEnabled();
-            var waitSignoutButton = WaitUntilClickable(signOutButton);
-            buttonElement = new ButtonElement(signOutButton);
+            var waitSignoutButton = WaitUntilClickable(signOutButtonLocator);
+            buttonElement = new ButtonElement(signOutButtonLocator);
             buttonElement.ClickIfEnabled();
         }
     }

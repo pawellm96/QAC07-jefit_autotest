@@ -6,15 +6,16 @@ using Jefit_test.Utils;
 
 namespace Jefit_test.Tests
 {
+    [TestFixture]
+    [AllureTag("smoke")]
+    [AllureOwner("Pavel")]
     [AllureNUnit]
     public class AncetPageTest : Jefit_BaseTest
     {
         private AncetPage ancetPage = new AncetPage();
 
         [Test]
-        [AllureTag("smoke")]
         [AllureSeverity(SeverityLevel.critical)]
-        [AllureOwner("Pavel")]
         [AllureSuite("SuccessfulOpeningAncetPage")]
         [AllureStep("Проверка открытия страницыы с анкетой перед регистрацыей")]
         public void SetUserParameters()

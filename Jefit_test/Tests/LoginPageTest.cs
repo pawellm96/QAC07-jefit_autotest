@@ -1,18 +1,21 @@
 ﻿using Allure.Net.Commons;
+using Allure.NUnit;
 using Allure.NUnit.Attributes;
 using Jefit_test.Pages;
 using Jefit_test.Utils;
 
 namespace Jefit_test.Tests
 {
+    [TestFixture]
+    [AllureTag("smoke")]
+    [AllureOwner("Pavel")]
+    [AllureNUnit]
     public class LoginPageTest : Jefit_BaseTest
     {
         private LoginPage loginPage = new LoginPage();
 
         [Test, Order(1)]
-        [AllureTag("smoke")]
         [AllureSeverity(SeverityLevel.critical)]
-        [AllureOwner("Pavel")]
         [AllureSuite("Login page")]
         [AllureStep("Выполнить вход на страницу логина через кнопку на начальной странице")]
         public void OpenLogInPage()
@@ -25,9 +28,7 @@ namespace Jefit_test.Tests
         }
 
         [Test, Order(2)]
-        [AllureTag("smoke")]
         [AllureSeverity(SeverityLevel.critical)]
-        [AllureOwner("Pavel")]
         [AllureSuite("Enter Login Data")]
         [AllureStep("Выполнить вход на страницу логина через кнопку на начальной странице")]
         public void EnterUserData() 
@@ -38,9 +39,7 @@ namespace Jefit_test.Tests
         }
 
         [Test, Order(3)]
-        [AllureTag("smoke")]
         [AllureSeverity(SeverityLevel.critical)]
-        [AllureOwner("Pavel")]
         [AllureSuite("Sign out")]
         [AllureStep("Выполнить выход через кабинет пользователя")]
         public void SignOut()
