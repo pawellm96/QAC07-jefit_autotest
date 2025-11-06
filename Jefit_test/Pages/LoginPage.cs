@@ -18,7 +18,7 @@ namespace Jefit_test.Pages
         private readonly By continueButton = By.XPath("//button[normalize-space(text())='Continue' and @type='button']");
         private readonly By userMenu = By.XPath("//span[contains(@class,'truncate') and text()='kaR35xPCGFKcQM3m']");
         private readonly By signOutButton = By.XPath("//div[@data-slot='label' and normalize-space(text())='Sign out']");
-        private readonly By modalPanel = By.Id("headlessui-dialog-panel-_r_1n_");
+        private readonly By modalPanel = By.XPath("//div[@data-headlessui-state='open' and .//h2[contains(text(),'Welcome to the new My Jefit Dashboard!')]]");
 
         [AllureStep("Открыть начальную страницу")]
         public void OpenPage()
