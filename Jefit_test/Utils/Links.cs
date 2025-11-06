@@ -6,7 +6,7 @@
 
         public const string ElitePage = "https://www.jefit.com/elite";
 
-        public const string JefitWatchUpdate = "https://www.jefit.com/wp/jefit-news-product-updates/newtrack-heart-rate-calories-in-real-time-with-jefit-apple-watch/";
+        public const string JefitWatchUpdate = "https://www.jefit.com/wp/exercise-tips/sustainable-strength-build-muscle-without-burning-out/";
 
         public const string AncetPage = "https://www.jefit.com/signup";
 
