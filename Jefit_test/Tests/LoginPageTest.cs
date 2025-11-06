@@ -45,6 +45,7 @@ namespace Jefit_test.Tests
         [AllureStep("Выполнить выход через кабинет пользователя")]
         public void SignOut()
         {
+            loginPage.RefreshPage();
             loginPage.CLickUserField();
             Assert.That(driver.Url.Equals(Links.StartPage), Is.True, "После выхода пользователь должен быть перенаправлен на стартовую страницу");
         }

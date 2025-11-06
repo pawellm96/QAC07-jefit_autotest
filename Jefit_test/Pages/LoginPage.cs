@@ -50,37 +50,37 @@ namespace Jefit_test.Pages
 
         }
 
-        [AllureStep("Закрыть модальное окно и дождаться исчезновения")]
-        public void CloseModalIfVisible()
-        {
-            try
-            {
-                var modal = new BaseElement(modalPanel, 3); // короткий таймаут
-                if (modal.IsDisplayed())
-                {
-                    buttonElement = new ButtonElement(continueButton);
-                    buttonElement.ClickIfEnabled();
+        //[AllureStep("Закрыть модальное окно и дождаться исчезновения")]
+        //public void CloseModalIfVisible()
+        //{
+        //    try
+        //    {
+        //        var modal = new BaseElement(modalPanel, 3); // короткий таймаут
+        //        if (modal.IsDisplayed())
+        //        {
+        //            buttonElement = new ButtonElement(continueButton);
+        //            buttonElement.ClickIfEnabled();
 
-                    // дождаться, пока модальное окно скроется
-                    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                    wait.Until(d =>
-                    {
-                        try
-                        {
-                            return !modal.IsDisplayed();
-                        }
-                        catch (NoSuchElementException)
-                        {
-                            return true; // если элемента уже нет — считаем, что окно закрыто
-                        }
-                    });
-                }
-            }
-            catch (NoSuchElementException)
-            {
-                // Модального окна нет — продолжаем
-            }
-        }
+        //            // дождаться, пока модальное окно скроется
+        //            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+        //            wait.Until(d =>
+        //            {
+        //                try
+        //                {
+        //                    return !modal.IsDisplayed();
+        //                }
+        //                catch (NoSuchElementException)
+        //                {
+        //                    return true; // если элемента уже нет — считаем, что окно закрыто
+        //                }
+        //            });
+        //        }
+        //    }
+        //    catch (NoSuchElementException)
+        //    {
+        //        // Модального окна нет — продолжаем
+        //    }
+        //}
 
         public bool WaitUntilLoginFieldVisible()
         {
@@ -90,7 +90,7 @@ namespace Jefit_test.Pages
         [AllureStep("Открыть выпадающий список поля пользователя")]
         public void CLickUserField()
         {
-            CloseModalIfVisible();
+            //CloseModalIfVisible();
             var waitUserMenu = WaitUntilClickable(userMenu);
             buttonElement = new ButtonElement(userMenu);
             buttonElement.ClickIfEnabled();
