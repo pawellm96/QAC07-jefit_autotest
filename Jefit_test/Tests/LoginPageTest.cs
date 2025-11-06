@@ -46,6 +46,7 @@ namespace Jefit_test.Tests
         public void SignOut()
         {
             loginPage.RefreshPage();
+            loginPage.WaitUntilLoading(Links.UserJefit);
             loginPage.CLickUserField();
             Assert.That(driver.Url.Equals(Links.StartPage), Is.True, "После выхода пользователь должен быть перенаправлен на стартовую страницу");
         }
