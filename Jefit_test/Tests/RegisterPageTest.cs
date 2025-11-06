@@ -1,7 +1,7 @@
 ﻿using Allure.Net.Commons;
 using Allure.NUnit.Attributes;
 using Jefit_test.Pages;
-using Jefit_test.Utils;
+using Jefit_test.TestData;
 
 namespace Jefit_test.Tests
 {

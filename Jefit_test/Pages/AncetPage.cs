@@ -1,5 +1,6 @@
 ﻿using Allure.NUnit.Attributes;
 using Jefit_test.SeleniumFramework;
+using Jefit_test.TestData;
 using Jefit_test.Utils;
 using OpenQA.Selenium;
 
@@ -7,6 +8,7 @@ namespace Jefit_test.Pages
 {
     public class AncetPage : BasePage
     {
+        private TestDataReader userData;
         private ButtonElement buttonElement;
         private RadioButtonElement radioButtonElement;
 
@@ -29,6 +31,7 @@ namespace Jefit_test.Pages
         private readonly By startModeLocator = By.XPath("//span[contains(@class, 'text-text-secondary') and normalize-space(text())=\"It's a personal log and tracker for your workouts, and designed to replace a paper fitness journal\"]");
         private readonly By trainingLimitationsLocator = By.XPath("//span[contains(@class, 'text-text-primary') and normalize-space(text())='Sensitive knees']");
 
+
         [AllureStep("Открыть страницу Анкеты")]
         public void OpenAncetPage()
         {
@@ -46,7 +49,7 @@ namespace Jefit_test.Pages
         [AllureStep("Проверяем состояние радиокнопки по локатору")]
         public bool IsRadioButtonSelected(By radioLocator)
         {
-            var wait = WaitUntilClickable(radioLocator);
+            WaitHelper.WaitUntilClickable(driver, radioLocator);
             radioButtonElement = new RadioButtonElement(radioLocator);
             return radioButtonElement.IsSelected();
         }
@@ -54,15 +57,21 @@ namespace Jefit_test.Pages
         [AllureStep("Нажать кнопку подтверждения 'Continue'")]
         public void CLickSubmit()
         {
-            var wait = WaitUntilClickable(submitButton);
+            WaitHelper.WaitUntilClickable(driver, submitButton);
             buttonElement = new ButtonElement(submitButton);
             buttonElement.ClickIfEnabled();
+        }
+
+        [AllureStep("Загрузить данные пользователя из CSV")]
+        public void LoadUserData()
+        {
+            userData = TestDataReader.FromCsv(@"TestData\UserHelthParameters.csv");
         }
 
         [AllureStep("Выбираем мужской пол")]
         public void SetMale()
         {
-            var wait = WaitUntilClickable(maleRadio);
+            WaitHelper.WaitUntilClickable(driver, maleRadio);
             radioButtonElement = new RadioButtonElement(maleRadio);
             radioButtonElement.Select();
         }
@@ -70,7 +79,7 @@ namespace Jefit_test.Pages
         [AllureStep("Выбираем опцию 'Improve endurance'")]
         public void SetEnduranceOption()
         {
-            var wait = WaitUntilClickable(enduranceOptionLocator);
+            WaitHelper.WaitUntilClickable(driver, enduranceOptionLocator);
             radioButtonElement = new RadioButtonElement(enduranceOptionLocator);
             radioButtonElement.Select();
         }
@@ -78,7 +87,7 @@ namespace Jefit_test.Pages
         [AllureStep("Выбираем опцию 'Average'")]
         public void SetAverageOption()
         {
-            var wait = WaitUntilClickable(currentBuildOptionLocator);
+            WaitHelper.WaitUntilClickable(driver, currentBuildOptionLocator);
             radioButtonElement = new RadioButtonElement(currentBuildOptionLocator);
             radioButtonElement.Select();
         }
@@ -93,7 +102,7 @@ namespace Jefit_test.Pages
         [AllureStep("Выбираем целевую группу")]
         public void SetBodyPart()
         {
-            var wait = WaitUntilClickable(bodyPartLocator);
+            WaitHelper.WaitUntilClickable(driver, bodyPartLocator);
             buttonElement = new ButtonElement(bodyPartLocator);
             buttonElement.ClickIfEnabled();
         }
@@ -101,7 +110,7 @@ namespace Jefit_test.Pages
         [AllureStep("Выбираем опцию 'Intermediate'")]
         public void SetIntermediateOption()
         {
-            var wait = WaitUntilClickable(fitnessLevelOptionLocator);
+            WaitHelper.WaitUntilClickable(driver, fitnessLevelOptionLocator);
             radioButtonElement = new RadioButtonElement(fitnessLevelOptionLocator);
             radioButtonElement.Select();
         }
@@ -109,7 +118,7 @@ namespace Jefit_test.Pages
         [AllureStep("Выбираем единицы измерения СИ")]
         public void SetSIOption()
         {
-            var wait = WaitUntilClickable(selectSILocator);
+            WaitHelper.WaitUntilClickable(driver, selectSILocator);
             buttonElement = new ButtonElement(selectSILocator);
             buttonElement.ClickIfEnabled();
         }
@@ -117,32 +126,32 @@ namespace Jefit_test.Pages
         [AllureStep("Вводим рост")]
         public void EnterHeight()
         {
-            var wait = WaitUntilClickable(inputHeightLocator);
+            WaitHelper.WaitUntilClickable(driver, inputHeightLocator);
             var heightInput = new BaseElement(inputHeightLocator);
-            heightInput.SetUpText("186");
+            heightInput.SetUpText(userData.Height);
         }
 
         [AllureStep("Вводим Вес")]
         public void EnterWeight()
         {
-            var wait = WaitUntilClickable(inputWeightLocator);
+            WaitHelper.WaitUntilClickable(driver, inputWeightLocator);
             var weightInput = new BaseElement(inputWeightLocator);
-            weightInput.SetUpText("102");
+            weightInput.SetUpText(userData.Weight);
         }
 
         [AllureStep("Вводим Желаемый Вес")]
         public void EnterGoalWeight()
         {
-            var wait = WaitUntilClickable(inputGoalWeightLocator);
+            WaitHelper.WaitUntilClickable(driver, inputGoalWeightLocator);
             var weightInput = new BaseElement(inputGoalWeightLocator);
-            weightInput.SetUpText("108");
+            weightInput.SetUpText(userData.GoalWeight);
         }
 
         [AllureStep("Вводим Возраст")]
         public void EnterAge()
         {
             var ageInput = new BaseElement(inputAgeLocator);
-            ageInput.SetUpText("29");
+            ageInput.SetUpText(userData.Age);
         }
 
         [AllureStep("Выбираем опцию 'Home'")]

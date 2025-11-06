@@ -3,6 +3,7 @@ using Allure.NUnit;
 using Allure.NUnit.Attributes;
 using Jefit_test.Pages;
 using Jefit_test.SeleniumFramework;
+using Jefit_test.TestData;
 using Jefit_test.Utils;
 using OpenQA.Selenium;
 
@@ -24,7 +25,7 @@ namespace Jefit_test.Tests
         {
             userPage.OpenLoginPage();
             userPage.EnterLoginData("pawellm96@gmail.com", "Wasd123@");
-            userPage.WaitUntilLoading(Links.UserJefit);
+            WaitHelper.WaitUntilLoading(driver, Links.UserJefit);
             Assert.That(driver.Url.Contains("/my-jefit"), Is.True, "После успешного входа пользователь должен быть перенаправлен на страницу профиля /my-jefit");
         }
 
@@ -35,7 +36,7 @@ namespace Jefit_test.Tests
         public void ExercisesMenuTest()
         {
             userPage.SelectExercises();
-            userPage.WaitUntilLoading(Links.ExercisePage);
+            WaitHelper.WaitUntilLoading(driver, Links.ExercisePage);
             Assert.That(driver.Url.Contains("/exercises"), Is.True, "Страница с упражнениями должна быть открыта");
         }
 
@@ -61,7 +62,7 @@ namespace Jefit_test.Tests
 
         [Test, Order(4)]
         [AllureSeverity(SeverityLevel.normal)]
-        [AllureSuite("Create custom exercise")]
+        [AllureSuite("Delete custom exercise")]
         public void DeleteCustomExercisesTest()
         {
             int exercisesToDelete = 3;
@@ -73,7 +74,8 @@ namespace Jefit_test.Tests
                 userPage.WaitForPageToLoad();
             }
 
-            userPage.VerifyCreateCustomExerciseButtonText("(0/3)");
+            string actualButtonText = userPage.GetCreateCustomExerciseButtonText();
+            Assert.That(actualButtonText.Contains("(0/3)"), Is.True,  $"Ожидалось, что кнопка будет содержать '(0/3)'");
         }
     }
 }

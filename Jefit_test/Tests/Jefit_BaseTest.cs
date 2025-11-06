@@ -15,12 +15,12 @@ namespace Jefit_test.Tests
         {
             driver = BrowserUtils.Driver;
             driver.Manage().Window.Maximize();
-            screenshotUtils = new ScreenshotUtils();
         }
 
         [TearDown]
         public void TearDown()
         {
+            screenshotUtils = new ScreenshotUtils();
             var context = TestContext.CurrentContext;
 
             if (context.Result.Outcome.Status == TestStatus.Failed)

@@ -2,6 +2,7 @@
 using Allure.NUnit;
 using Allure.NUnit.Attributes;
 using Jefit_test.Pages;
+using Jefit_test.TestData;
 using Jefit_test.Utils;
 
 namespace Jefit_test.Tests
@@ -22,6 +23,7 @@ namespace Jefit_test.Tests
         {
             ancetPage.OpenAncetPage();
             Assert.That(driver.Url, Is.EqualTo(Links.AncetPage), $"Проверка начальной страницы");
+            ancetPage.LoadUserData();
             ancetPage.WaitForPageToLoad();
             Assert.That(ancetPage.IsOnStage("Select your gender"), Is.True, "Страница должна находится на этапе 'Select your gender'");
             ancetPage.SetMale();
@@ -46,7 +48,7 @@ namespace Jefit_test.Tests
             ancetPage.SetTrainLenghtOption();
             ancetPage.SetModeOption();
             ancetPage.SetLimitationsOption();
-            ancetPage.WaitUntilLoading(Links.ResultPage, 10);
+            WaitHelper.WaitUntilLoading(driver, Links.ResultPage, 10);
             Assert.That(driver.Url, Is.EqualTo(Links.ResultPage), $"По завершению заполнения формы должна открыться страница результата");
         }
     }

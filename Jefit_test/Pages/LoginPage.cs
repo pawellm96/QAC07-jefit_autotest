@@ -1,5 +1,6 @@
 ﻿using Allure.NUnit.Attributes;
 using Jefit_test.SeleniumFramework;
+using Jefit_test.TestData;
 using Jefit_test.Utils;
 using OpenQA.Selenium;
 
@@ -49,16 +50,16 @@ namespace Jefit_test.Pages
 
         public bool WaitUntilLoginFieldVisible()
         {
-            return WaitUntilVisible(nameFieldLocator) != null;
+            return WaitHelper.WaitUntilVisible(driver, nameFieldLocator) != null;
         }
 
         [AllureStep("Открыть выпадающий список поля пользователя")]
         public void CLickUserField()
         {
-            var waitUserMenu = WaitUntilClickable(userMenuLocator);
+            var waitUserMenu = WaitHelper.WaitUntilClickable(driver, userMenuLocator);
             buttonElement = new ButtonElement(userMenuLocator);
             buttonElement.ClickIfEnabled();
-            var waitSignoutButton = WaitUntilClickable(signOutButtonLocator);
+            var waitSignoutButton = WaitHelper.WaitUntilClickable(driver, signOutButtonLocator);
             buttonElement = new ButtonElement(signOutButtonLocator);
             buttonElement.ClickIfEnabled();
         }

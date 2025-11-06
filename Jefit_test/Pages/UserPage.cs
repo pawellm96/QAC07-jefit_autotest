@@ -1,5 +1,6 @@
 ﻿using Allure.NUnit.Attributes;
 using Jefit_test.SeleniumFramework;
+using Jefit_test.TestData;
 using Jefit_test.Utils;
 using OpenQA.Selenium;
 
@@ -21,7 +22,6 @@ namespace Jefit_test.Pages
         private readonly By menuButtonLocator = By.XPath("//button[@aria-haspopup='menu' and contains(@class,'inline-flex')]");
         private readonly By deleteLabelLocator = By.XPath("//div[@data-slot='label' and text()='Delete']");
         private readonly By confirmDeleteButtonLocator = By.XPath("//button[text()='Delete' and contains(@class,'inline-flex')]");
-
 
         [AllureStep("Открыть страницу Login")]
         public void OpenLoginPage()
@@ -54,7 +54,7 @@ namespace Jefit_test.Pages
         {
             buttonElement = new ButtonElement(createCustomExerciseButtonLocator);
             buttonElement.ClickIfEnabled();
-            var inputWait = WaitUntilClickable(exerciseTitleInputLocator);
+            WaitHelper.WaitUntilClickable(driver, exerciseTitleInputLocator);
             inputElement = new BaseElement(exerciseTitleInputLocator);
             inputElement.SetUpText(newExerciseName);
             buttonElement = new ButtonElement(saveExerciseButtonLocator);
@@ -65,25 +65,22 @@ namespace Jefit_test.Pages
         [AllureStep("Удаление всех кастомных упражнений")]
         public void DeleteCustomExercise()
         {
-            var menuWait = WaitUntilClickable(menuButtonLocator);
+            var menuWait = WaitHelper.WaitUntilClickable(driver, menuButtonLocator);
             buttonElement = new ButtonElement(menuButtonLocator);
             buttonElement.ClickIfEnabled();
-            var deleteWait = WaitUntilClickable(deleteLabelLocator);
+            var deleteWait = WaitHelper.WaitUntilClickable(driver, deleteLabelLocator);
             buttonElement = new ButtonElement(deleteLabelLocator);
             buttonElement.ClickIfEnabled();
-            var confirmWait = WaitUntilClickable(confirmDeleteButtonLocator);
+            var confirmWait = WaitHelper.WaitUntilClickable(driver, confirmDeleteButtonLocator);
             buttonElement = new ButtonElement(confirmDeleteButtonLocator);
             buttonElement.ClickIfEnabled();
         }
 
-        [AllureStep("Проверка кнопки 'Create custom exercise' с динамическим текстом")]
-        public void VerifyCreateCustomExerciseButtonText(string expectedCounter)
+        [AllureStep("Получение текста кнопки 'Create custom exercise'")]
+        public string GetCreateCustomExerciseButtonText()
         {
             var buttonElement = new BaseElement(createCustomExerciseButtonLocator);
-            string buttonText = buttonElement.GetText();
-
-            Assert.That(buttonText.Contains(expectedCounter), Is.True,
-                $"Ожидалось, что кнопка будет содержать '{expectedCounter}', но текст кнопки: '{buttonText}'");
+            return buttonElement.GetText();
         }
     }
 }

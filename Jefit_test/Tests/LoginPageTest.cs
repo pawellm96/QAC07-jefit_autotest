@@ -2,6 +2,7 @@
 using Allure.NUnit;
 using Allure.NUnit.Attributes;
 using Jefit_test.Pages;
+using Jefit_test.TestData;
 using Jefit_test.Utils;
 
 namespace Jefit_test.Tests
@@ -34,7 +35,7 @@ namespace Jefit_test.Tests
         public void EnterUserData() 
         {
             loginPage.EnterLoginData("pawellm96@gmail.com", "Wasd123@");
-            loginPage.WaitUntilLoading(Links.UserJefit);
+            WaitHelper.WaitUntilLoading(driver, Links.UserJefit);
             Assert.That(driver.Url.Contains("/my-jefit"), Is.True, "После успешного входа пользователь должен быть перенаправлен на страницу профиля /my-jefit");
         }
 
@@ -45,7 +46,7 @@ namespace Jefit_test.Tests
         public void SignOut()
         {
             loginPage.RefreshPage();
-            loginPage.WaitUntilLoading(Links.UserJefit);
+            WaitHelper.WaitUntilLoading(driver, Links.UserJefit);
             loginPage.CLickUserField();
             Assert.That(driver.Url.Equals(Links.StartPage), Is.True, "После выхода пользователь должен быть перенаправлен на стартовую страницу");
         }

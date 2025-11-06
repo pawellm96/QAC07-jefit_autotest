@@ -1,6 +1,4 @@
-﻿using static System.Net.WebRequestMethods;
-
-namespace Jefit_test.Utils
+﻿namespace Jefit_test.TestData
 {
     public static class Links
     {

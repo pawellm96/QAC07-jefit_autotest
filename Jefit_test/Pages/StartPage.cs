@@ -1,4 +1,5 @@
 ﻿using Allure.NUnit.Attributes;
+using Jefit_test.TestData;
 using Jefit_test.Utils;
 using OpenQA.Selenium;
 
@@ -21,23 +22,23 @@ namespace Jefit_test.Pages
         [AllureStep("Вызвать выпадающий список 'Products'")]
         public void OpenDropeDown()
         {
-            var productsMenu = WaitUntilClickable(productsMenuLocator);
+            var productsMenu = WaitHelper.WaitUntilClickable(driver, productsMenuLocator);
             productsMenu.Click();
 
             try
             {
-                WaitUntilVisible(maximizedWindowItemLocator);
+                WaitHelper.WaitUntilVisible(driver, maximizedWindowItemLocator);
             }
             catch (WebDriverTimeoutException)
             {
-                WaitUntilVisible(minimalWindowItemLocator);
+                WaitHelper.WaitUntilVisible(driver, minimalWindowItemLocator);
             }
         }
 
         [AllureStep("Прокрутить страницу до заголовка Exercise Tips")]
         public void ScrollToExerciseTips()
         {
-            var header = WaitUntilVisible(exerciseTipsHeaderLocator);
+            var header = WaitHelper.WaitUntilVisible(driver, exerciseTipsHeaderLocator);
             ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView({behavior:'smooth', block:'center'});", header);
         }
 
@@ -45,7 +46,7 @@ namespace Jefit_test.Pages
         public void ClickJefitWatchLink()
         {
             ScrollToExerciseTips();
-            var link = WaitUntilClickable(jefitWatchTextLocator);
+            var link = WaitHelper.WaitUntilClickable(driver, jefitWatchTextLocator);
             link.Click();
         }
     }

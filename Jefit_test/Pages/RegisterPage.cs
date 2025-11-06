@@ -1,5 +1,6 @@
 ﻿using Allure.NUnit.Attributes;
 using Jefit_test.SeleniumFramework;
+using Jefit_test.TestData;
 using Jefit_test.Utils;
 using OpenQA.Selenium;
 
@@ -10,8 +11,8 @@ namespace Jefit_test.Pages
         private ButtonElement buttonElement;
 
         private readonly By emailErrorLocator = By.XPath("//p[@id='email-error' and normalize-space(text())='Email already in use.']");
-        private readonly By emailInput = By.XPath("//input[@id='email']");
-        private readonly By submitButton = By.CssSelector("button[type='submit']");
+        private readonly By emailInputLocator = By.XPath("//input[@id='email']");
+        private readonly By submitButtonLocator = By.CssSelector("button[type='submit']");
 
         [AllureStep("Открыть страницу Регистрации")]
         public void OpenRegisterPage()
@@ -22,16 +23,16 @@ namespace Jefit_test.Pages
         [AllureStep("Вводим Почту")]
         public void EnterMail(string mail)
         {
-            var wait = WaitUntilClickable(emailInput);
-            var heightInput = new BaseElement(emailInput);
+            WaitHelper.WaitUntilClickable(driver, emailInputLocator);
+            var heightInput = new BaseElement(emailInputLocator);
             heightInput.SetUpText(mail);
         }
 
         [AllureStep("Нажать кнопку подтверждения 'Continue'")]
         public void CLickSubmit()
         {
-            var wait = WaitUntilClickable(submitButton);
-            buttonElement = new ButtonElement(submitButton);
+            WaitHelper.WaitUntilClickable(driver, submitButtonLocator);
+            buttonElement = new ButtonElement(submitButtonLocator);
             buttonElement.ClickIfEnabled();
         }
 
@@ -40,7 +41,7 @@ namespace Jefit_test.Pages
         {
             try
             {
-                var element = WaitUntilVisible(emailErrorLocator, timeoutSeconds);
+                var element = WaitHelper.WaitUntilVisible(driver, emailErrorLocator, timeoutSeconds);
                 return element.Displayed;
             }
             catch (WebDriverTimeoutException)
