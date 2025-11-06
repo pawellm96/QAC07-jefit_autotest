@@ -53,13 +53,32 @@ namespace Jefit_test.Pages
         [AllureStep("Закрыть модальное окно и дождаться исчезновения")]
         public void CloseModalIfVisible()
         {
-            var modal = new BaseElement(modalPanel);
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            if (modal.IsDisplayed())
+            try
             {
-                buttonElement = new ButtonElement(continueButton);
-                buttonElement.ClickIfEnabled();
-                wait.Until(d => !modal.IsDisplayed());
+                var modal = new BaseElement(modalPanel, 3); // короткий таймаут
+                if (modal.IsDisplayed())
+                {
+                    buttonElement = new ButtonElement(continueButton);
+                    buttonElement.ClickIfEnabled();
+
+                    // дождаться, пока модальное окно скроется
+                    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                    wait.Until(d =>
+                    {
+                        try
+                        {
+                            return !modal.IsDisplayed();
+                        }
+                        catch (NoSuchElementException)
+                        {
+                            return true; // если элемента уже нет — считаем, что окно закрыто
+                        }
+                    });
+                }
+            }
+            catch (NoSuchElementException)
+            {
+                // Модального окна нет — продолжаем
             }
         }
 
